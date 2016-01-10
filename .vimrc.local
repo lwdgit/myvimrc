@@ -1,0 +1,39 @@
+set scrolloff=5
+set tabstop=8
+set softtabstop=4
+set shiftwidth=4
+set pastetoggle=<leader>z
+
+map <F3> :NERDTreeFocus<CR>
+
+" On OSX
+vmap <D-c> y:call system("pbcopy", getreg("\""))<CR>
+nmap <D-v> :call setreg("\"",system("pbpaste"))<CR>p
+
+let $PATH=$PATH."/usr/local/bin/compass"
+let g:sass_compile_cdloop = 5
+let g:sass_compile_auto = 0
+let g:sass_compile_file = ['scss', 'sass']
+let g:sass_compile_cssdir = ['css', 'stylesheet']
+let g:sass_compile_beforecmd = "growlnotify -t 'sass-compile.vim' -m 'start sass compile.'"
+" let g:sass_compile_aftercmd = "growlnotify -t 'sass-compile.vim' -m ${sasscompileresult}"
+
+set statusline+=%#warningmsg#
+set statusline+=%{SyntasticStatuslineFlag()}
+set statusline+=%*
+
+let g:syntastic_always_populate_loc_list = 0
+let g:syntastic_auto_loc_list = 0
+let g:syntastic_check_on_open = 1
+let g:syntastic_check_on_wq = 0
+let g:syntastic_mode_map = { 'passive_filetypes': ['sass', 'haml'] }
+" 关闭sass语法检查
+
+".vimrc
+map  :call JsBeautify()
+" or
+autocmd FileType javascript noremap  :call JsBeautify()
+" for html
+autocmd FileType html noremap  :call HtmlBeautify()
+" for css or scss
+autocmd FileType css noremap  :call CSSBeautify()
