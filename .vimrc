@@ -23,7 +23,8 @@ set incsearch "开启实时搜索
 set showmatch "显示括号匹配
 set matchpairs=(:),{:},[:],<:>
 set mouse=a "启用鼠标
-set fileencodings=uft-8,gbk "使用utf-8或gbk打开文件
+set fileencodings=utf-8
+"set fileencodings=gbk,uft-8",gb18030 "使用utf-8或gbk打开文件
 set helplang=cn
 
 set shiftwidth=4 "设置缩进长度
@@ -31,7 +32,8 @@ set tabstop=4    "设置制表符长度
 set expandtab
 
 
-"===============快捷键区块=============
+"------------ 捷键区块 ---------------------
+"{{{
 
 "映射窗口切换快捷键
 nnoremap <S-Up> <C-W><Up>
@@ -48,12 +50,13 @@ set pastetoggle=<leader>z
 "hack mac复制粘贴
 vnoremap <C-c> y:call system("pbcopy", getreg("\""))<CR>
 nmap <C-v> <ESC>:call setreg("\"",system("pbpaste"))<CR>p
-imap <C-v> <ESC>:call setreg("\"",system("pbpaste"))<CR>pi
+imap <C-v> <ESC>:call setreg("\"",system("pbpaste"))<CR>pa
 
 "=====================================
-
+"}}}
 
 "------------ plugin 区块-------------------
+"{{{
 " set the runtime path to include Vundle and initialize
 set rtp+=~/.vim/bundle/Vundle.vim
 call vundle#begin()
@@ -79,6 +82,7 @@ Plugin 'AtsushiM/sass-compile.vim'
 Plugin 'terryma/vim-multiple-cursors'
 Plugin 'bling/vim-airline'
 Plugin 'gorodinskiy/vim-coloresque' "css颜色显示
+Plugin 'pthrasher/conqueterm-vim'
 
 Plugin 'tpope/vim-obsession'
 Plugin 'dhruvasagar/vim-prosession'
@@ -89,11 +93,13 @@ Plugin 'Valloric/YouCompleteMe'
 Plugin 'marijnh/tern_for_vim'
 
 Plugin 'tacahiroy/ctrlp-funky'
-
+Plugin 'shepherdwind/vim-velocity'
 
 "----------------------
+"}}}
 
 "插件功能区块 
+"{{{
 
 " ------------------------------------------------------------
 " NERDTree
@@ -101,15 +107,21 @@ Plugin 'tacahiroy/ctrlp-funky'
 "NERDTree: autoload when startup vim
 autocmd StdinReadPre * let s:std_in=1
 autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
+autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
 
 "NERDTree: C-n to open NERDTree
 map <F3> :NERDTreeFocus<CR>
+map <F4> :NERDTreeFind<CR>
 
 " NERDTree: File highlighting
 function! NERDTreeHighlightFile(extension, fg, bg, guifg, guibg)
  exec 'autocmd filetype nerdtree highlight ' . a:extension .' ctermbg='. a:bg .' ctermfg='. a:fg .' guibg='. a:guibg .' guifg='. a:guifg
  exec 'autocmd filetype nerdtree syn match ' . a:extension .' #^\s\+.*'. a:extension .'$#'
 endfunction
+
+let g:NERDTreeWinSize = 30
+let g:NERDTreeMouseMode = 1
+let g:NERDTreeMapToggleZoom = '<Space>'
 
 " Emmet
 map <C-e> <C-y>,
@@ -119,6 +131,12 @@ let g:user_emmet_mode='in'
 " vim-surround
 Plugin 'tpope/vim-surround'
 xmap s <Plug>VSurround
+
+"vim-javascript
+"打开代码折叠
+let b:javascript_fold=1
+"打开javascript 对dom, html, css的支持
+let javascript_enable_domhtmlcss=1
 
 "ctrlp
 let g:ctrlp_map = '<c-p>'
@@ -177,6 +195,12 @@ nnoremap <Leader>fu :CtrlPFunky<Cr>
 " narrow the list down with a word under cursor
 map <leader><leader> :execute 'CtrlPFunky ' . expand('<cword>')<Cr>
 
+"vim-velocity
+au BufNewFile,BufRead *.vm,*.html,*.htm,*.shtml,*.stm set ft=velocity
+
+nnoremap <S-t> :ConqueTermSplit bash<cr><cr>
+
+"}}}
 
 "----------------- 设置主题-----------------
 if has("gui")
@@ -186,3 +210,5 @@ else
     colorscheme molokai
 endif
 
+
+" vim:set fdm=marker
